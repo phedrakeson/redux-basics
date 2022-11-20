@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Redux</title>
     <script src="./redux.min.js"></script>
+    <script src="./immer.umd.production.min.js"></script>
   </head>
   <body>
     <h1>TOTAL: <span id="total"></span></h1>
@@ -17,6 +18,27 @@
       const INCREMENTAR = 'INCREMENTAR';
       const SOMAR = 'SOMAR';
       const initialState = 0;
+      const initialUserState = {
+        nome: 'Gabriel',
+        id: 199,
+      };
+
+      // Immer Obj Clone/ Immer usage
+      const obj1 = { idade: 32, nome: 'Pedro' };
+      const obj2 = immer.produce(obj1, (draft) => {
+        draft.idade = 35;
+      });
+
+      console.log(obj1 === obj2, obj1, obj2);
+
+      // const reducer = immer.produce((state, action) => {
+      //   switch (action.type) {
+      //     case 1:
+      //       console.log('Action 1')
+      //       state.nome = 'Madruga';
+      //       break;
+      //   }
+      // }, initialState);
 
       // action creators
       function incrementar() {
@@ -57,7 +79,16 @@
         }
       }
 
-      const reducer = Redux.combineReducers({ contador, modal });
+      function user(state = initialUserState, action) {
+        switch (action.type) {
+          case 'MUDAR_NOME':
+            return { ...state, nome: action.payload };
+          default:
+            return state;
+        }
+      }
+
+      const reducer = Redux.combineReducers({ contador, modal, user });
 
       const store = Redux.createStore(
         reducer,
@@ -90,6 +121,37 @@
       button.addEventListener('click', () => store.dispatch(incrementar()));
       abrir.addEventListener('click', () => store.dispatch(abrirModal()));
       fechar.addEventListener('click', () => store.dispatch(fecharModal()));
+
+      store.dispatch({ type: 'MUDAR_NOME', payload: 'Maria' });
+      store.dispatch({ type: 'MUDAR_NOME', payload: 'Pedro' });
+      store.dispatch({ type: 'MUDAR_NOME', payload: 'Joao' });
+    </script>
+
+    <script type="module">
+      import store from './store/configureStore.js';
+      import { incrementar } from './store/reducers/contador.js';
+      import {
+        incrementar_tempo,
+        reduzir_tempo,
+        modificar_email,
+      } from './store/reducers/aluno.js';
+      import {
+        completar_aula,
+        completar_curso,
+        resetar_curso,
+      } from './store/reducers/aulas.js';
+
+      store.subscribe(() => {
+        console.log('FUNCIONOU');
+      });
+
+      store.dispatch(incrementar());
+      store.dispatch(incrementar_tempo());
+      store.dispatch(reduzir_tempo());
+      store.dispatch(modificar_email('tyrionakeson@email.com'));
+      store.dispatch(completar_aula(3));
+      store.dispatch(completar_curso());
+      store.dispatch(resetar_curso());
     </script>
   </body>
 </html>
