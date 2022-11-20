@@ -13,6 +13,12 @@
     <button id="button">Incrementar++</button>
     <button id="fechar">Fechar</button>
     <button id="abrir">Abrir</button>
+    <ul>
+      <li id="item1" data-slide="1">Item 1</li>
+      <li id="item2" data-slide="2">Item 2</li>
+      <li id="item3" data-slide="3">Item 3</li>
+      <li id="item4" data-slide="4">Item 4</li>
+    </ul>
     <script>
       // Constantes
       const INCREMENTAR = 'INCREMENTAR';
@@ -129,7 +135,7 @@
 
     <script type="module">
       import store from './store/configureStore.js';
-      import { incrementar } from './store/reducers/contador.js';
+      import { incrementar, reduzir } from './store/reducers/contador.js';
       import {
         incrementar_tempo,
         reduzir_tempo,
@@ -146,6 +152,7 @@
       });
 
       store.dispatch(incrementar());
+      store.dispatch(reduzir());
       store.dispatch(incrementar_tempo());
       store.dispatch(reduzir_tempo());
       store.dispatch(modificar_email('tyrionakeson@email.com'));
@@ -153,5 +160,7 @@
       store.dispatch(completar_curso());
       store.dispatch(resetar_curso());
     </script>
+
+    <script src="./middleware/currying.js"></script>
   </body>
 </html>
