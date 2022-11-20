@@ -59,7 +59,11 @@
 
       const reducer = Redux.combineReducers({ contador, modal });
 
-      const store = Redux.createStore(reducer);
+      const store = Redux.createStore(
+        reducer,
+        window.__REDUX_DEVTOOLS_EXTENSION__ &&
+          window.__REDUX_DEVTOOLS_EXTENSION__()
+      );
       let state = store.getState();
       console.log(state);
 
