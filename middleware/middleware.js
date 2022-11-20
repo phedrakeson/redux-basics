@@ -17,8 +17,16 @@ const reduzirMiddleware = (store) => (next) => (action) => {
   return next(action);
 }
 
+// Usage for async functions
+const thunkMiddleware = (store) => (next) => (action) => {
+  if (typeof action === 'function') {
+    return action(store.dispatch, store.getState);
+  }
+  return next(action);
+}
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const enchancer = composeEnhancers(applyMiddleware(loggerMiddleware, reduzirMiddleware));
+const enchancer = composeEnhancers(applyMiddleware(loggerMiddleware, reduzirMiddleware, thunkMiddleware));
 
 export default enchancer;
