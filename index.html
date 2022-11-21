@@ -168,8 +168,10 @@
           }
         };
       }
-
-      store.dispatch(fetchUrl('https://dogsapi.origamid.dev/json/api/photo'));
+      const actualStore = store.getState();
+      if (actualStore.fetch.data === null) {
+        store.dispatch(fetchUrl('https://dogsapi.origamid.dev/json/api/photo'));
+      }
 
       store.dispatch(incrementar());
       store.dispatch(reduzir());

@@ -25,8 +25,22 @@ const thunkMiddleware = (store) => (next) => (action) => {
   return next(action);
 }
 
+const localStorageMiddleware = (store) => (next) => (action) => {
+  console.warn('LOCALSTORAGE', action)
+  if (action.localStorage !== undefined) {
+    console.log('LOCALSTORAGE', action)
+    window.localStorage.setItem(action.localStorage, JSON.stringify(action.payload));
+  }
+  return next(action);
+}
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const enchancer = composeEnhancers(applyMiddleware(loggerMiddleware, reduzirMiddleware, thunkMiddleware));
+const enchancer = composeEnhancers(applyMiddleware(
+  loggerMiddleware,
+  reduzirMiddleware,
+  thunkMiddleware,
+  localStorageMiddleware
+));
 
 export default enchancer;
